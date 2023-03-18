@@ -6,7 +6,7 @@
 /*   By: mchliyah <mchliyah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 01:53:35 by mchliyah          #+#    #+#             */
-/*   Updated: 2023/03/16 03:50:41 by mchliyah         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:29:36 by mchliyah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,19 @@ void	BitcoinExchange::check(void) {
 
 void	BitcoinExchange::print(std::ifstream &input_file) {
 	// printing the map content withe value multiplyd  exchange rate according to the date indicated in database
+	struct tm tm;
 	std::string line;
+
 	while (std::getline(input_file, line))
 	{
 		if (line.find("date") != std::string::npos)
 		{
+			line.clear();
+			continue;
+		}
+		if (!strptime(line.substr(0, 10).c_str(), "%Y-%m-%d", &tm))
+		{
+			std::cout << "bad imput => " << line.substr(0, 10) << std::endl;
 			line.clear();
 			continue;
 		}
@@ -99,15 +107,26 @@ void	BitcoinExchange::print(std::ifstream &input_file) {
 		std::string currency;
 		std::getline(iss, date, '|');
 		iss >> currency;
-		std::map<std::string, std::string>::iterator it;
-		for (it = data.begin(); it != data.end(); it++) {
-			std::string key = it->first;
-			std::string value = it->second;
-			if (date == key)
-				std::cout << date << " " << currency << " " << std::stof(value) * std::stof(currency) << std::endl;
-			key.clear();
-			value.clear();
+		if (currency.empty() || std::stof(currency) < 0 || std::stof(currency) > 1000)
+		{
+			if (currency.empty())
+				std::cout << "bad imput => " << line << std::endl;
+			else if (std::stof(currency) < 0)
+				std::cout << "Error: not a positive number." << std::endl;
+			else if (std::stof(currency) > 1000)
+				std::cout << "Error: too large a number." << std::endl;
+			line.clear();
+			date.clear();
+			currency.clear();
+			continue;
 		}
+		std::map<std::string, std::string>::iterator it;
+		std::string value;
+		for (it = data.begin(); it->first <= date ; it++) {
+			value.clear();
+			value = it->second;
+		}
+		std::cout << date << " => " << currency << " = " << std::stof(value) * std::stof(currency) << std::endl;
 		date.clear();
 		currency.clear();
 		line.clear();

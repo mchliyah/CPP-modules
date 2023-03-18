@@ -6,7 +6,7 @@
 /*   By: mchliyah <mchliyah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 01:53:43 by mchliyah          #+#    #+#             */
-/*   Updated: 2023/03/16 03:40:45 by mchliyah         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:06:11 by mchliyah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <map>
+#include <ctime>
 #include <sstream>
 
 class BitcoinExchange
