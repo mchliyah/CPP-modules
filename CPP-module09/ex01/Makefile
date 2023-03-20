@@ -5,12 +5,12 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mchliyah <mchliyah@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/03/20 22:52:42 by mchliyah          #+#    #+#              #
-#    Updated: 2023/03/20 22:52:46 by mchliyah         ###   ########.fr        #
+#    Created: 2023/03/20 22:52:36 by mchliyah          #+#    #+#              #
+#    Updated: 2023/03/20 23:28:37 by mchliyah         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = btc
+NAME = RPN
 
 CC = c++
 
@@ -18,7 +18,7 @@ RM = rm -f
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98 #-fsanitize=address -g
 
-FILES = main.cpp BitcoinExchange.cpp \
+FILES = main.cpp rpn.cpp \
 
 
 OBJECTS = $(FILES:.cpp=.o)

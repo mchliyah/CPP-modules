@@ -6,7 +6,7 @@
 /*   By: mchliyah <mchliyah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 01:53:35 by mchliyah          #+#    #+#             */
-/*   Updated: 2023/03/17 15:29:36 by mchliyah         ###   ########.fr       */
+/*   Updated: 2023/03/19 18:58:18 by mchliyah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,11 @@ void	BitcoinExchange::print(std::ifstream &input_file) {
 		}
 		std::map<std::string, std::string>::iterator it;
 		std::string value;
-		for (it = data.begin(); it->first <= date ; it++) {
-			value.clear();
-			value = it->second;
-		}
+		value = std::lower_bound(data.begin(), data.end(), date)->second;
+		// for (it = data.begin(); it->first <= date ; it++) {
+		// 	value.clear();
+		// 	value = it->second;
+		// }
 		std::cout << date << " => " << currency << " = " << std::stof(value) * std::stof(currency) << std::endl;
 		date.clear();
 		currency.clear();
