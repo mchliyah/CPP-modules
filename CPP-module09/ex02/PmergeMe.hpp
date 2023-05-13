@@ -13,14 +13,14 @@
 #ifndef PMERGEME_HPP
 #define PMERGEME_HPP
 
-
 #include <iostream>
 #include <vector>
-#include <queue>
+#include <algorithm>
+#include <list>
 #include <stdexcept>
 #include <ctime>
+#include <cstring>
 
 bool is_positive(const char *str);
-void mergeSort(std::vector<int> &arr, int low, int high, int threshold);
 
 #endif
