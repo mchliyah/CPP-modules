@@ -12,7 +12,18 @@
 
 #include "BitcoinExchange.hpp"
 
-BitcoinExchange::BitcoinExchange(const std::string& path) : file(path) {
+float stringToFloat(const std::string& str) {
+    std::istringstream iss(str);
+    float result;
+    iss >> result;
+    return result;
+}
+
+bool comparePairs(const std::pair<const std::string, std::string>& pair, const std::string& str) {
+    return pair.first < str;
+}
+
+BitcoinExchange::BitcoinExchange(const std::string& path) : file(path.c_str()) {
 	if (!file.is_open())
 		throw std::runtime_error("can't open file");	
 }
@@ -51,6 +62,7 @@ void	BitcoinExchange::read() {
 }
 
 void	BitcoinExchange::check(void) {
+
 	for (std::map<std::string, std::string>::iterator it = data.begin(); it != data.end(); it++) {
 		std::string key = it->first;
 		std::string value = it->second;
@@ -78,7 +90,7 @@ void	BitcoinExchange::check(void) {
 			throw std::runtime_error("invalid day");
 		if (key.substr(5, 2) == "02" && key.substr(8, 2) > "28")
 			throw std::runtime_error("february can't have more than 28 days");
-		if (std::stof(value) < 0)
+		if (stringToFloat(value) < 0)
 			throw std::runtime_error("negative value not allowed");
 	}
 }
@@ -107,13 +119,13 @@ void	BitcoinExchange::print(std::ifstream &input_file) {
 		std::string currency;
 		std::getline(iss, date, '|');
 		iss >> currency;
-		if (currency.empty() || std::stof(currency) < 0 || std::stof(currency) > 1000)
+		if (currency.empty() || stringToFloat(currency) < 0 || stringToFloat(currency) > 1000)
 		{
 			if (currency.empty())
 				std::cout << "bad imput => " << line << std::endl;
-			else if (std::stof(currency) < 0)
+			else if (stringToFloat(currency) < 0)
 				std::cout << "Error: not a positive number." << std::endl;
-			else if (std::stof(currency) > 1000)
+			else if (stringToFloat(currency) > 1000)
 				std::cout << "Error: too large a number." << std::endl;
 			line.clear();
 			date.clear();
@@ -122,12 +134,15 @@ void	BitcoinExchange::print(std::ifstream &input_file) {
 		}
 		std::map<std::string, std::string>::iterator it;
 		std::string value;
-		value = std::lower_bound(data.begin(), data.end(), date)->second;
+		
+		value = std::lower_bound(data.begin(), data.end(), date, comparePairs)->second;
+
+		// value = std::lower_bound(data.begin(), data.end(), date)->second;
 		// for (it = data.begin(); it->first <= date ; it++) {
 		// 	value.clear();
 		// 	value = it->second;
 		// }
-		std::cout << date << " => " << currency << " = " << std::stof(value) * std::stof(currency) << std::endl;
+		std::cout << date << " => " << currency << " = " << stringToFloat(value) * stringToFloat(currency) << std::endl;
 		date.clear();
 		currency.clear();
 		line.clear();
