@@ -95,21 +95,49 @@ void	BitcoinExchange::check(void) {
 	}
 }
 
-void	BitcoinExchange::print(std::ifstream &input_file) {
-	// printing the map content withe value multiplyd  exchange rate according to the date indicated in database
+bool	error(std::string& line){
 	struct tm tm;
+	if (line.find("date") != std::string::npos)
+		return true;
+	for (std::string::iterator it = line.begin(); it != line.end(); it++) {
+		if (*it == ',')
+			*it = '.';
+	}
+	if (line.find_first_not_of("0123456789.|- ") != std::string::npos) {
+		std::cout << "unsuported caracter found !. => " << line << std::endl;
+		return true;
+	}
+	if (!strptime(line.substr(0, 10).c_str(), "%Y-%m-%d", &tm))
+	{
+		std::cout << "bad input ! => " << line.substr(0, 10) << std::endl;
+		return true;
+	}
+	if (line.substr(0, 4) < "2009" || line.substr(0, 4) > "2022")
+	{std::cout << "bad imput => " << line.substr(0, 10) << std::endl;
+	return true;
+	}
+	if (line.substr(5, 2) < "01" || line.substr(5, 2) > "12")
+	{std::cout << "invalid month => " << line.substr(5, 2) << std::endl;
+	return true;
+	}
+	if (line.substr(8, 2) < "01" || line.substr(8, 2) > "31")
+	{std::cout << "invalid day => " << line.substr(8, 2) << std::endl;
+	return true;
+	}
+	if (line.substr(5, 2) == "02" && line.substr(8, 2) > "28")
+	{std::cout << "february can't have more than 28 days => " << line.substr(2, 0) << std::endl;
+	return true;
+	}
+	return false;
+}
+
+void	BitcoinExchange::print(std::ifstream &input_file) {
 	std::string line;
 
 	while (std::getline(input_file, line))
 	{
-		if (line.find("date") != std::string::npos)
+		if (error(line))
 		{
-			line.clear();
-			continue;
-		}
-		if (!strptime(line.substr(0, 10).c_str(), "%Y-%m-%d", &tm))
-		{
-			std::cout << "bad imput => " << line.substr(0, 10) << std::endl;
 			line.clear();
 			continue;
 		}
@@ -147,5 +175,4 @@ void	BitcoinExchange::print(std::ifstream &input_file) {
 		currency.clear();
 		line.clear();
 	}
-	
 }
