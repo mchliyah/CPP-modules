@@ -63,6 +63,8 @@ void	BitcoinExchange::read() {
 
 void	BitcoinExchange::check(void) {
 
+	if (data.empty())
+		throw std::runtime_error("erro empty data file !");
 	for (std::map<std::string, std::string>::iterator it = data.begin(); it != data.end(); it++) {
 		std::string key = it->first;
 		std::string value = it->second;
@@ -160,16 +162,10 @@ void	BitcoinExchange::print(std::ifstream &input_file) {
 			currency.clear();
 			continue;
 		}
-		std::map<std::string, std::string>::iterator it;
+		std::map<std::string, std::string>::iterator it = data.upper_bound(date);
 		std::string value;
-		
-		value = std::lower_bound(data.begin(), data.end(), date, comparePairs)->second;
-
-		// value = std::lower_bound(data.begin(), data.end(), date)->second;
-		// for (it = data.begin(); it->first <= date ; it++) {
-		// 	value.clear();
-		// 	value = it->second;
-		// }
+		if (it != data.begin())
+			value = (--it)->second;
 		std::cout << date << " => " << currency << " = " << stringToFloat(value) * stringToFloat(currency) << std::endl;
 		date.clear();
 		currency.clear();

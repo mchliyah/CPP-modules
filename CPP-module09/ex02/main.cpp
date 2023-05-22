@@ -46,7 +46,7 @@ void merge(std::vector<int>& v, int start, int mid, int end) {
 }
 
 void merge_insertion_sort(std::vector<int>& v, int start, int end) {
-  if (end - start + 1 <= 4) {
+  if (end - start + 1 <= 2) {
     insertion_sort(v, start, end);
   } else {
     int mid = start + (end - start) / 2;
@@ -56,23 +56,6 @@ void merge_insertion_sort(std::vector<int>& v, int start, int end) {
   }
 }
 
-
-// void insertion_sort(std::list<int>& l) {
-//   for (std::list<int>::iterator it = std::next(l.begin()); it != l.end(); it++) {
-//     int key = *it;
-//     std::list<int>::iterator jt = std::prev(it);
-//     while (jt != l.begin() && *jt > key) {
-//       std::iter_swap(jt, std::prev(jt));
-//       jt--;
-//     }
-//     if (*jt > key) {
-//       l.erase(jt);
-//       l.push_front(key);
-//     } else {
-//       std::iter_swap(it, std::prev(it));
-//     }
-//   }
-// }
 void insertion_sort(std::list<int>& l) {
     for (std::list<int>::iterator it = ++l.begin(); it != l.end(); ++it) {
         int key = *it;
@@ -88,23 +71,8 @@ void insertion_sort(std::list<int>& l) {
     }
 }
 
-// void merge_insertion_sort(std::list<int>& l) {
-//   if (l.size() <= 20) {
-//     insertion_sort(l);
-//   } else {
-//     std::list<int> l1, l2;
-//     std::size_t n = l.size() / 2;
-//     std::copy_n(l.begin(), n, std::back_inserter(l1));
-//     std::copy(std::next(l.begin(), n), l.end(), std::back_inserter(l2));
-//     merge_insertion_sort(l1);
-//     merge_insertion_sort(l2);
-//     l1.merge(l2);
-//     l.swap(l1);
-//   }
-// }
-
 void merge_insertion_sort(std::list<int>& l) {
-  if (l.size() <= 4) {
+  if (l.size() <= 2) {
     insertion_sort(l);
   } else {
     std::list<int> l1, l2;
@@ -113,6 +81,7 @@ void merge_insertion_sort(std::list<int>& l) {
 	std::advance(it, n);
     std::copy(l.begin(), it, std::back_inserter(l1));
     std::copy(it, l.end(), std::back_inserter(l2));
+	l.clear();
     merge_insertion_sort(l1);
     merge_insertion_sort(l2);
 
@@ -128,7 +97,6 @@ void merge_insertion_sort(std::list<int>& l) {
         ++it2;
       }
     }
-
     while (it1 != l1.end()) {
       l.push_back(*it1);
       ++it1;
@@ -140,8 +108,6 @@ void merge_insertion_sort(std::list<int>& l) {
     }
   }
 }
-
-
 
  int main(int argc, char **argv) {
 	try
@@ -163,6 +129,10 @@ void merge_insertion_sort(std::list<int>& l) {
 		// 	std::cout << arr[i] << " ";
 		// }
 		// std::cout << std::endl;
+		// std::cout << "Before : " ;
+		// for(std::list<int>::iterator it = lst.begin(); it != lst.end(); it++)
+		// 	std::cout << *it << " " ;
+		// std::cout << std::endl;
 		clock_t start = clock();
 		merge_insertion_sort(arr, 0, arr.size() - 1);
 		clock_t end = clock();
@@ -174,10 +144,13 @@ void merge_insertion_sort(std::list<int>& l) {
 		// for (size_t i = 0; i < arr.size(); i++) {
 		// 	std::cout << arr[i] << " ";
 		// }
+		// std::cout << std::endl;
+		// std::cout << "After : " ;
 		// for(std::list<int>::iterator it = lst.begin(); it != lst.end(); it++)
-		// 	std::cout << *it << std::endl;
-		std::cout << "Time to process a range of " << arr.size() << " elements : " << ((double)(end - start) / CLOCKS_PER_SEC) * 1000 << "us" << std::endl;
-		std::cout << "Time to process a range of " << lst.size() << " elements : " << ((double)(end1 - start1) / CLOCKS_PER_SEC) * 1000 << "us" << std::endl;
+		// 	std::cout << *it << " " ;
+		// std::cout << std::endl;
+		std::cout << "Time to process a range of " << arr.size() << " elements with vector : " << ((double)(end - start) / CLOCKS_PER_SEC) * 1000 << "us" << std::endl;
+		std::cout << "Time to process a range of " << lst.size() << " elements eith list : " << ((double)(end1 - start1) / CLOCKS_PER_SEC) * 1000 << "us" << std::endl;
 	}
 	catch (std::exception &e)
 	{
