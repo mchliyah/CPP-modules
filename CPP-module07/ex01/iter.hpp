@@ -13,8 +13,16 @@
 #include <iostream>
 
 template<typename T>
-
 void iter(T *array, unsigned int lenth, void(*f) (T &elemnt)){
+	if (array)
+	{
+    	for (unsigned int i = 0; i< lenth; i++)
+    	    (*f)(array[i]);
+	}
+}
+
+template<typename T>
+void iter(T *array, unsigned int lenth, void(*f) (const T &elemnt)){
 	if (array)
 	{
     	for (unsigned int i = 0; i< lenth; i++)
@@ -31,7 +39,7 @@ template<typename T>
 void decrement(T &value) {
 	value--;
 }
-template<typename T>
-void print(T &value) {
-	std::cout <<" "<< value<<" ";
-}
+// template<typename T>
+// void print(T &value) {
+// 	std::cout <<" "<< value<<" ";
+// }
